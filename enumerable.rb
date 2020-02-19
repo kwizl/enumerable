@@ -26,31 +26,48 @@ module Enumerable
 
   def my_all?
     my_each do |i|
-      if yield(i) == true
-        return true
-      else
-        return false
-      end
+      (return true if yield(i) == true)
+      (return false if yield(i) == false)
     end
     true
   end
+
+  def my_any?
+    count = 0
+    state = false
+    my_each do |i|
+      count += 1 if yield(i) == true
+      count += 0 if yield(i) == false
+    end
+    state = true if count.positive?
+    state = false if count.zero?
+    state
+  end
 end
 
-arr = [2, 3, 8, 5, 7, 10]
+arr = [2, 3, 1, 5, 6]
 
+puts "my_each"
 arr.my_each do |i|
   print i
 end
 puts
 puts
 
+puts "my_each_with_index"
 arr.my_each_with_index do |v, k|
   p "#{k}: #{v}"
 end
 puts
 
+puts "my_select"
 p(arr.my_select { |i| i > 4 })
 puts
 
+puts "my_all"
 p(arr.my_all? { |i| i > 4 })
+puts
+
+puts "my_any"
+p(arr.my_any? { |i| i > 4 })
 puts
