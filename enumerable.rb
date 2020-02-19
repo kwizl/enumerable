@@ -43,31 +43,47 @@ module Enumerable
     state = false if count.zero?
     state
   end
+
+  def my_none?
+    count = 0
+    state = false
+    my_each do |i|
+      count += 1 if yield(i) == true
+      count += 0 if yield(i) == false
+    end
+    state = false if count.positive?
+    state = true if count.zero?
+    state
+  end
 end
 
-arr = [2, 3, 1, 5, 6]
+arr = [1, 2, 3]
 
-puts "my_each"
+puts 'my_each'
 arr.my_each do |i|
   print i
 end
 puts
 puts
 
-puts "my_each_with_index"
+puts 'my_each_with_index'
 arr.my_each_with_index do |v, k|
   p "#{k}: #{v}"
 end
 puts
 
-puts "my_select"
+puts 'my_select'
 p(arr.my_select { |i| i > 4 })
 puts
 
-puts "my_all"
+puts 'my_all'
 p(arr.my_all? { |i| i > 4 })
 puts
 
-puts "my_any"
+puts 'my_any'
 p(arr.my_any? { |i| i > 4 })
+puts
+
+puts 'my_none'
+p(arr.my_none? { |i| i > 4 })
 puts
