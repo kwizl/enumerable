@@ -23,6 +23,17 @@ module Enumerable
     end
     array
   end
+
+  def my_all?
+    my_each do |i|
+      if yield(i) == true
+        return true
+      else
+        return false
+      end
+    end
+    true
+  end
 end
 
 arr = [2, 3, 8, 5, 7, 10]
@@ -39,4 +50,7 @@ end
 puts
 
 p(arr.my_select { |i| i > 4 })
+puts
+
+p(arr.my_all? { |i| i > 4 })
 puts
