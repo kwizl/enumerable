@@ -55,9 +55,21 @@ module Enumerable
     state = true if count.zero?
     state
   end
+
+  def my_count
+    count = 0
+    if block_given?
+      my_each do |i|
+        count += 1 if yield(i) == true
+      end
+    else
+      my_each { count += 1 }
+    end
+    count
+  end
 end
 
-arr = [1, 2, 3]
+arr = [1, 2, 3, 4]
 
 puts 'my_each'
 arr.my_each do |i|
@@ -86,4 +98,12 @@ puts
 
 puts 'my_none'
 p(arr.my_none? { |i| i > 4 })
+puts
+
+puts 'my_count'
+p(arr.my_count)
+puts
+
+puts 'my_count with block'
+p(arr.my_count { |i| i > 1 })
 puts
