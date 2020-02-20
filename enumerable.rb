@@ -67,9 +67,17 @@ module Enumerable
     end
     count
   end
+
+  def my_map
+    my_each do |i|
+      push(yield(i))
+    end
+    self[length / 2, length]
+  end
 end
 
 arr = [1, 2, 3, 4]
+arr_h = { 1 => 1, 2 => 2, 3 => 3 }
 
 puts 'my_each'
 arr.my_each do |i|
@@ -106,4 +114,8 @@ puts
 
 puts 'my_count with block'
 p(arr.my_count { |i| i > 1 })
+puts
+
+puts 'my_map array'
+p(arr.my_map { |i| i * 2 })
 puts
