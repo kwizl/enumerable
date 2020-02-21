@@ -3,8 +3,10 @@
 # Custom Enumerable Methods
 module Enumerable
   def my_each
-    for i in 0..length - 1
-      yield(self[i])
+    count = 0
+    while count < self.length
+      yield(self[count])
+      count += 1
     end
     self
   end
