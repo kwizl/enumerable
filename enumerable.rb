@@ -75,13 +75,17 @@ module Enumerable
     self[length / 2, length]
   end
 
-  def my_inject(addition_value=nil)
+  def my_inject(addition_value = nil)
     my_each do
       for i in 0...length
         addition_value = yield(self[i - 1], self[i])
       end
     end
     addition_value
+  end
+
+  def multiply_els(arr)
+    arr.my_inject(0) { |i, j| i * j }
   end
 end
 
@@ -130,4 +134,8 @@ puts
 
 puts 'my_inject array'
 p(arr.my_inject(0) { |i, j| i * j })
+puts
+
+puts 'multiply_els array'
+p(multiply_els[arr])
 puts
