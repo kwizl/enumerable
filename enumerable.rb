@@ -68,11 +68,16 @@ module Enumerable
     count
   end
 
-  def my_map
-    my_each do |i|
-      push(yield(i))
+  def my_map(proc_map = nil)
+    array = []
+    if proc_map.nil?
+      my_each { |i| array.push(yield(i)) }
+    else
+      my_each do |i|
+        array.push(proc_map.call(i))
+      end
     end
-    self[length / 2, length]
+    array
   end
 
   def my_inject(addition_value = nil)
@@ -89,7 +94,11 @@ module Enumerable
   end
 end
 
+<<<<<<< HEAD
 arr = [2, 2, 2, 3, 4]
+=======
+arr = [5, 2, 3, 4]
+>>>>>>> feature/my_map
 
 puts 'my_each'
 arr.my_each do |i|
@@ -128,8 +137,13 @@ puts 'my_count with block'
 p(arr.my_count { |i| i > 1 })
 puts
 
-puts 'my_map array'
-p(arr.my_map { |i| i * 2 })
+puts 'my_map'
+p(arr.my_map { |i| i * 4 })
+puts
+
+puts 'my_map proc'
+proc_map = proc { |i| i * 3 }
+p(arr.my_map(proc_map))
 puts
 
 puts 'my_inject array'
