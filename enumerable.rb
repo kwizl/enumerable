@@ -74,10 +74,18 @@ module Enumerable
     end
     self[length / 2, length]
   end
+
+  def my_inject(addition_value=nil)
+    my_each do
+      for i in 0...length
+        addition_value = yield(self[i - 1], self[i])
+      end
+    end
+    addition_value
+  end
 end
 
-arr = [1, 2, 3, 4]
-arr_h = { 1 => 1, 2 => 2, 3 => 3 }
+arr = [2, 2, 2, 3, 4]
 
 puts 'my_each'
 arr.my_each do |i|
@@ -118,4 +126,8 @@ puts
 
 puts 'my_map array'
 p(arr.my_map { |i| i * 2 })
+puts
+
+puts 'my_inject array'
+p(arr.my_inject(0) { |i, j| i * j })
 puts
