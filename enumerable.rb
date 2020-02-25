@@ -1,6 +1,3 @@
-# frozen_string_literal: true
-# rubocop:disable Style/LineLength, Style/StringLiterals
-# Custom Enumerable Methods
 module Enumerable
   def my_each
     if self.class == Range
