@@ -9,8 +9,8 @@ In this project, I have written iteration methods inside a module, that are iden
 
 ## Installation and Testing Guidelines
   To get a local copy of this project, clone [this repo](https://github.com/kwizl/enumerable)
-  - **cd bubble_sort**
-  - In your Terminal, Run **ruby bubble_sort.rb**
+  - **cd enumerable**
+  - In your Terminal, Run **ruby enmerable.rb**
   - you can change the values in the arrays to your custom values and test again
 
 ## Authors
