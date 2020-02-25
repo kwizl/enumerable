@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 # rubocop:disable Style/LineLength, Style/StringLiterals
-
 # Custom Enumerable Methods
 module Enumerable
   def my_each
     if self.class == Range
-      l = self.to_a
-      for i in 0...l.length
-        yield(l[i])
+      l = to_a
+      count = 0
+      while count < l.length
+        yield(l[count])
+        count += 1
       end
       l
     else
       count = 0
-      while count < self.length
+      while count < length
         yield(self[count])
         count += 1
       end
@@ -22,7 +23,7 @@ module Enumerable
 
   def my_each_with_index
     count = 0
-    while count < self.length
+    while count < length
       yield(self[count], count)
       count += 1
     end
@@ -121,7 +122,7 @@ puts 'my_each'
 arr.my_each do |i|
   print i
 end
-puts 
+puts
 (0..2).my_each do |i|
   print i
 end
@@ -168,10 +169,10 @@ puts
 
 puts 'my_inject array'
 p(arr.my_inject { |j, i| j + i })
-puts [5, 7, 8, 3].my_inject(1) { |j, i| j + i }
-puts (0..4).my_inject(1) { |j, i| j + i }
-longest = %w{ cat sheep bear }.inject do |memo, word|
+p([5, 7, 8, 3].my_inject(1) { |j, i| j + i })
+p((0..4).my_inject(1) { |j, i| j + i })
+longest = %w[cat sheep bear].inject do |memo, word|
   memo.length > word.length ? memo : word
 end
 puts longest
-p (1..5).my_inject(2, &:*)
+p((1..5).my_inject(2, &:*))
