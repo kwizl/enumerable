@@ -8,6 +8,13 @@ module Enumerable
         count += 1
       end
       l
+    elsif self.class == Hash
+      count = 0
+      while count < length
+        yield(self[count])
+        count += 1
+      end
+      self
     else
       count = 0
       while count < length
@@ -114,9 +121,13 @@ module Enumerable
 end
 
 arr = [5, 2, 3, 4]
-
+ar = {1 => 1, 2 => 2, 3 => 3}
 puts 'my_each'
 arr.my_each do |i|
+  print i
+end
+puts
+ar.each do |i|
   print i
 end
 puts
