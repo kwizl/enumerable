@@ -39,3 +39,6 @@ Layout/ExtraSpacing:
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
+
+Metrics/ModuleLength:
+  Enabled: false
