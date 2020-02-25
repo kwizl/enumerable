@@ -4,12 +4,20 @@
 # Custom Enumerable Methods
 module Enumerable
   def my_each
-    count = 0
-    while count < self.length
-      yield(self[count])
-      count += 1
+    if self.class == Range
+      l = self.to_a
+      for i in 0...l.length
+        yield(l[i])
+      end
+      l
+    else
+      count = 0
+      while count < self.length
+        yield(self[count])
+        count += 1
+      end
+      self
     end
-    self
   end
 
   def my_each_with_index
@@ -109,14 +117,14 @@ end
 
 arr = [5, 2, 3, 4]
 
-p 1.send("+",3)
-p 1.respond_to? "+++".to_sym
-
 puts 'my_each'
 arr.my_each do |i|
   print i
 end
-puts
+puts 
+(0..2).my_each do |i|
+  print i
+end
 puts
 
 puts 'my_each_with_index'
@@ -166,4 +174,4 @@ longest = %w{ cat sheep bear }.inject do |memo, word|
   memo.length > word.length ? memo : word
 end
 puts longest
-p (1..5).my_inject(2, &:*) 
+p (1..5).my_inject(2, &:*)
