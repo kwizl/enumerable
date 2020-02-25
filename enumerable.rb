@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Style/LineLength, Style/StringLiterals
 
 # Custom Enumerable Methods
 module Enumerable
@@ -84,13 +85,21 @@ module Enumerable
     array
   end
 
-  def my_inject(addition_value = nil)
-    my_each do
-      for i in 0...length
-        addition_value = yield(self[i - 1], self[i])
+  def my_inject(value = nil)
+    each do |i|
+      if value.nil?
+        value = i
+      elsif value.class == Range
+        count = 0
+        while count < length
+          value += self[count]
+          count += 1
+        end
+      else
+        value = yield(value, i)
       end
     end
-    addition_value
+    value
   end
 
   def multiply_els(arr)
@@ -98,11 +107,10 @@ module Enumerable
   end
 end
 
-<<<<<<< HEAD
-arr = [2, 2, 2, 3, 4]
-=======
 arr = [5, 2, 3, 4]
->>>>>>> feature/my_map
+
+p 1.send("+",3)
+p 1.respond_to? "+++".to_sym
 
 puts 'my_each'
 arr.my_each do |i|
@@ -151,9 +159,11 @@ p(arr.my_map(proc_map))
 puts
 
 puts 'my_inject array'
-p(arr.my_inject(0) { |i, j| i * j })
-puts
-
-puts 'multiply_els array'
-p(multiply_els[arr])
-puts
+p(arr.my_inject { |j, i| j + i })
+puts [5, 7, 8, 3].my_inject(1) { |j, i| j + i }
+puts (0..4).my_inject(1) { |j, i| j + i }
+longest = %w{ cat sheep bear }.inject do |memo, word|
+  memo.length > word.length ? memo : word
+end
+puts longest
+p (1..5).my_inject(2, &:*) 
