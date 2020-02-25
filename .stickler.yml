@@ -1,8 +1,8 @@
 
 linters:
-    rubocop:
-      display_cop_names: true
-      config: "./rubocop.yml"
+  rubocop:
+    display_cop_names: true
+    config: "./rubocop.yml"
   
   files:
     ignore:
