@@ -15,6 +15,8 @@ module Enumerable
         count += 1
       end
       self
+    elsif !block_given?
+      self
     else
       count = 0
       while count < length
@@ -26,20 +28,29 @@ module Enumerable
   end
 
   def my_each_with_index
-    count = 0
-    while count < length
-      yield(self[count], count)
-      count += 1
+    if block_given?
+      count = 0
+      while count < length
+        yield(self[count], count)
+        count += 1
+      end
+      self
+    else
+      self
     end
     self
   end
 
   def my_select
-    array = []
-    my_each do |i|
-      array.push(i) if yield(i)
+    if block_given?
+      array = []
+      my_each do |i|
+        array.push(i) if yield(i)
+      end
+      array
+    else
+      self
     end
-    array
   end
 
   def my_all?
@@ -62,16 +73,19 @@ module Enumerable
     state
   end
 
-  def my_none?
-    count = 0
-    state = false
-    my_each do |i|
-      count += 1 if yield(i) == true
-      count += 0 if yield(i) == false
+  def my_none?(val = nil)
+    if block_given?
+      my_each { |element| return false if yield(element) }
+    elsif val.nil?
+      my_each { |element| return false if element }
+    elsif val.class == Class
+      my_each { |element| return false if element.class.ancestors.include? val }
+    elsif val.class == Regexp
+      my_each { |element| return false if element =~ val }
+    else
+      my_each { |element| return false if element == val }
     end
-    state = false if count.positive?
-    state = true if count.zero?
-    state
+    true
   end
 
   def my_count
@@ -88,14 +102,18 @@ module Enumerable
 
   def my_map(proc_map = nil)
     array = []
-    if proc_map.nil?
-      my_each { |i| array.push(yield(i)) }
-    else
-      my_each do |i|
-        array.push(proc_map.call(i))
+    if block_given?
+      if proc_map.nil?
+        my_each { |i| array.push(yield(i)) }
+      elsif block_given?
+        my_each do |i|
+          array.push(proc_map.call(i))
+        end
+        array
       end
+    else
+      self
     end
-    array
   end
 
   def my_inject(value = nil)
@@ -119,68 +137,3 @@ module Enumerable
     arr.my_inject(0) { |i, j| i * j }
   end
 end
-
-arr = [5, 2, 3, 4]
-ar = {1 => 1, 2 => 2, 3 => 3}
-puts 'my_each'
-arr.my_each do |i|
-  print i
-end
-puts
-ar.each do |i|
-  print i
-end
-puts
-(0..2).my_each do |i|
-  print i
-end
-puts
-
-puts 'my_each_with_index'
-arr.my_each_with_index do |v, k|
-  p "#{k}: #{v}"
-end
-puts
-
-puts 'my_select'
-p(arr.my_select { |i| i > 4 })
-puts
-
-puts 'my_all'
-p(arr.my_all? { |i| i > 4 })
-puts
-
-puts 'my_any'
-p(arr.my_any? { |i| i > 4 })
-puts
-
-puts 'my_none'
-p(arr.my_none? { |i| i > 4 })
-puts
-
-puts 'my_count'
-p(arr.my_count)
-puts
-
-puts 'my_count with block'
-p(arr.my_count { |i| i > 1 })
-puts
-
-puts 'my_map'
-p(arr.my_map { |i| i * 4 })
-puts
-
-puts 'my_map proc'
-proc_map = proc { |i| i * 3 }
-p(arr.my_map(proc_map))
-puts
-
-puts 'my_inject array'
-p(arr.my_inject { |j, i| j + i })
-p([5, 7, 8, 3].my_inject(1) { |j, i| j + i })
-p((0..4).my_inject(1) { |j, i| j + i })
-longest = %w[cat sheep bear].inject do |memo, word|
-  memo.length > word.length ? memo : word
-end
-puts longest
-p((1..5).my_inject(2, &:*))
