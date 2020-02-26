@@ -91,3 +91,20 @@ p [true, false, true].my_none?
 puts
 p %w{ant bear cat}.my_none?(/b/)
 p %w{ant bear cat}.none?(/b/)
+
+puts
+puts '-----------------------'
+p %w[ant bear cat].my_any?(/b/)
+p %w[ant bear cat].any?(/b/)
+p [nil, true, 99].my_any?(Integer)
+p [nil, true, 99].any?(Integer)
+p [nil, true, 99].my_any?
+p [nil, true, 99].any? 
+
+puts '----------------------'
+p %w[ant beat cat].all?(/t/)
+p %w[ant beat cat].my_all?(/t/)
+p [1, 'a', 3.14].all?(Numeric)
+p [1, 'a', 3.14].my_all?(Numeric)
+p [true, true].my_all?
+p [true, true].all?

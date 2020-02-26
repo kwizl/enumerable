@@ -53,37 +53,75 @@ module Enumerable
     end
   end
 
-  def my_all?
-    my_each do |i|
-      (return true if yield(i) == true)
-      (return false if yield(i) == false)
+  def my_all?(val = nil)
+    state = false
+    count = 0
+    if block_given?
+      my_each do |i|
+        (state = true if yield(i) == true)
+        (state = false if yield(i) == false)
+      end
+    elsif val.class == Regexp
+      my_each do |i|
+        if i =~ val
+          count += 0
+        else
+          count += 1
+        end
+      end
+      state = false if count.positive?
+      state = true if count.zero?
+    elsif val.class == Class
+      my_each do |i|
+        if i.class.ancestors.include? val
+          count += 0
+        else
+          count += 1
+        end
+      end
+      state = false if count.positive?
+      state = true if count.zero?
+    elsif !block_given? && val.nil?
+      my_each do |i|
+        if i == true
+          count += 0
+        else
+          count += 1
+          break
+        end
+      end
+      state = false if count.positive?
+      state = true if count.zero?
     end
-    true
+    state
   end
 
-  def my_any?
-    count = 0
-    state = false
-    my_each do |i|
-      count += 1 if yield(i) == true
-      count += 0 if yield(i) == false
+  def my_any?(val = nil)
+    if block_given?
+      my_each { |i| return true if yield(i) }
+    elsif val.nil?
+      my_each { |i| return true if i }
+    elsif val.class == Regexp
+      my_each { |i| return true if i =~ val }
+    elsif val.class == Class
+      my_each { |i| return true if i.class.ancestors.include? val }
+    else
+      my_each { |i| return true if i == val }
     end
-    state = true if count.positive?
-    state = false if count.zero?
-    state
+    false
   end
 
   def my_none?(val = nil)
     if block_given?
-      my_each { |element| return false if yield(element) }
+      my_each { |i| return false if yield(i) }
     elsif val.nil?
-      my_each { |element| return false if element }
-    elsif val.class == Class
-      my_each { |element| return false if element.class.ancestors.include? val }
+      my_each { |i| return false if i }
     elsif val.class == Regexp
-      my_each { |element| return false if element =~ val }
+      my_each { |i| return false if i =~ val }
+    elsif val.class == Class
+      my_each { |i| return false if i.class.ancestors.include? val }
     else
-      my_each { |element| return false if element == val }
+      my_each { |i| return false if i == val }
     end
     true
   end
